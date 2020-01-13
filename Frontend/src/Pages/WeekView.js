@@ -57,7 +57,7 @@ export default function WeekView({ recipes, onChange, week, saveWeek, deleteWeek
             <InputGroup.Prepend>
             <InputGroup.Text>Week</InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl type="number" data-key="week" value={week.week} onChange={onChange} />
+            <FormControl type="number" min="1" max="52" data-key="week" value={week.week} onChange={onChange} />
         </InputGroup>
         <Tab.Container defaultActiveKey="1">
             <Row>

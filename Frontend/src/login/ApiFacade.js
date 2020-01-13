@@ -20,6 +20,9 @@ function ApiFacade() {
         const loggedIn = getToken() != null;
         return loggedIn;
     }
+    const checkLoggedIn = () => {
+        return fetchUser();
+    }
     const logout = () => {
         localStorage.removeItem("jwtToken");
     }
@@ -87,7 +90,7 @@ function ApiFacade() {
     return {
         login,
         register,
-        loggedIn,
+        checkLoggedIn,
         logout,
         fetchUser,
         fetchAllRecipies,

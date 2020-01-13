@@ -9,7 +9,7 @@ export default function App({ page }) {
     const [error, setError] = useState();
 
     useEffect(() => {
-        setLoggedIn(Facade.loggedIn());
+        Facade.checkLoggedIn().then(res => setLoggedIn(true)).catch(e => setLoggedIn(false));
     }, [])
 
     const logout = () => { 
