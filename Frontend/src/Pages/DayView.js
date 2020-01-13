@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import { Form, Table} from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import { Form, Table, InputGroup, FormControl } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom';
 import URLSettings from '../settings'
 
 export default function DayView({ day, recipes, onChange, week }) {
+    const [recipesData, setRecipesData] = useState([]);
     const [recipe, setRecipe] = useState({});
+
+    useEffect(() => {
+        setRecipesData(recipes);
+    }, [recipes])
   
     const recipeClicked = (recipe) => {
       setRecipe(recipe);
@@ -13,7 +18,7 @@ export default function DayView({ day, recipes, onChange, week }) {
     const createTableData = () => {
       let data = [];
   
-      recipes.forEach((recipe, index) => {
+      recipesData.forEach((recipe, index) => {
         data.push(
           <tr key={index} style={week[day] === recipe.id ? {"backgroundColor": "#007bff"} : {}}>
             <td>
@@ -35,24 +40,35 @@ export default function DayView({ day, recipes, onChange, week }) {
   
       return data;
     }
+
+    const onSearch = (evt) => {
+        let newRecipeList = recipes.filter(r => r.id.toUpperCase().startsWith(evt.target.value.toUpperCase()));
+        setRecipesData(newRecipeList);
+    }
   
     return (
       <div>
         {recipe.id !== undefined ? <Redirect to={URLSettings.getURL("ProductDetails") + "/" + recipe.id} /> : ""}
-        <Form>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Selected</th>
-                <th>Name</th>
-                <th>Preperation time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {createTableData()}
-            </tbody>
-          </Table>
-        </Form>
-      </div>
+            <Form>
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>Selected</th>
+                        <th>Name</th>
+                        <th>Preperation time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {createTableData()}
+                    </tbody>
+                </Table>
+                <InputGroup size="sm" className="mb-3">
+                    <InputGroup.Prepend>
+                    <InputGroup.Text>Name Search</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl type="text" data-key="week" placeholder="Search...." onChange={onSearch} />
+                </InputGroup>
+            </Form>
+        </div>
     )
   }

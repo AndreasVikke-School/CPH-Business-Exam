@@ -80,6 +80,10 @@ function ApiFacade() {
         return fetch(URL + "/api/menuplan/edit", makeOptions("POST", true, menuPlan)).then(handleHttpErrors);
     }
 
+    const deleteMenuPlan = (id) => {
+        return fetch(URL + "/api/menuplan/delete/" + id, makeOptions("DELETE", true)).then(handleHttpErrors);
+    }
+
     return {
         login,
         register,
@@ -90,7 +94,8 @@ function ApiFacade() {
         fetchMenuPlanByWeek,
         createMenuPlan,
         editMenuPlan,
-        fetchRecipeByName
+        fetchRecipeByName,
+        deleteMenuPlan
     }
 
 }

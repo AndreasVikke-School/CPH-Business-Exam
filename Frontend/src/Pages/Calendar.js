@@ -25,7 +25,7 @@ export default function Calendar() {
               editWeek[dayPlan.dayOfWeek] = dayPlan.recipeDTO.id;
             });
             setWeek(editWeek);
-        });
+        }).catch(e => console.log(e));
       }
   }, [user.userName])
 
@@ -82,12 +82,16 @@ export default function Calendar() {
     }
   }
 
+  const deleteWeek = (id) => {
+    facade.deleteMenuPlan(id).then(res => {setMessages({success: "Week deleted succesfully"}); setWeek({week: week.id})});
+  }
+
   return (
     <div>
       <h3>Username: {user.userName}</h3>
       {messages.error !== undefined ? <Alert variant="danger">{messages.error}</Alert> : ""}
       {messages.success !== undefined ? <Alert variant="success">{messages.success}</Alert> : ""}
-      <WeekView recipes={recipes} onChange={onChange} week={week} saveWeek={saveWeek} />
+      <WeekView recipes={recipes} onChange={onChange} week={week} saveWeek={saveWeek} deleteWeek={deleteWeek} />
     </div>
   )
 }
