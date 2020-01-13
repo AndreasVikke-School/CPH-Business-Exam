@@ -1,18 +1,21 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Andreas Vikke
  */
 @Entity
+@NamedQuery(name = "DayPlan.deleteAllRows", query = "DELETE from DayPlan")
 public class DayPlan implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,5 +68,38 @@ public class DayPlan implements Serializable {
 
     public void setMenuPlan(MenuPlan menuPlan) {
         this.menuPlan = menuPlan;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.recipeId);
+        hash = 67 * hash + this.dayOfWeek;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DayPlan other = (DayPlan) obj;
+        if (this.dayOfWeek != other.dayOfWeek) {
+            return false;
+        }
+        if (!Objects.equals(this.recipeId, other.recipeId)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 }

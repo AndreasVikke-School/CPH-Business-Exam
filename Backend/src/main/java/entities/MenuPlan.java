@@ -3,10 +3,12 @@ package entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -14,6 +16,7 @@ import javax.persistence.OneToMany;
  * @author Andreas Vikke
  */
 @Entity
+@NamedQuery(name = "MenuPlan.deleteAllRows", query = "DELETE from MenuPlan")
 public class MenuPlan implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,5 +74,38 @@ public class MenuPlan implements Serializable {
         List<String> shoppingList = new ArrayList();
         
         return shoppingList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 31 * hash + Objects.hashCode(this.id);
+        hash = 31 * hash + Objects.hashCode(this.user);
+        hash = 31 * hash + this.week;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MenuPlan other = (MenuPlan) obj;
+        if (this.week != other.week) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.user, other.user)) {
+            return false;
+        }
+        return true;
     }
 }

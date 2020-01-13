@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "roles")
+@NamedQuery(name = "Role.deleteAllRows", query = "DELETE from Role")
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;

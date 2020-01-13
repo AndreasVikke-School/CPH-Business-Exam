@@ -22,7 +22,13 @@ import javax.ws.rs.core.Response.Status;
 @Path("menuplan")
 public class MenuPlanResource {
 
-    private static final EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
+    private static final EntityManagerFactory emf
+            = EMF_Creator.createEntityManagerFactory(
+                "pu",
+                "jdbc:mysql://localhost:3307/exam",
+                "dev",
+                "ax2",
+                EMF_Creator.Strategy.CREATE);
     private static final MenuPlanFacade facade =  MenuPlanFacade.getFacade(emf);
     
     @Path("{id}")
@@ -53,7 +59,7 @@ public class MenuPlanResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @RolesAllowed({"user", "admin"})
-    public List<MenuPlanDTO> getSingleMenuPlanById(@PathParam("username") String username) {
+    public List<MenuPlanDTO> getAllMenuPlans(@PathParam("username") String username) {
         return facade.getAllMenuPlansByUser(username);
     }
     
