@@ -13,6 +13,9 @@ public class RecipeDTO {
     private List<String> preparaion_steps;
     private List<String> ingredients;
 
+    public RecipeDTO() {
+    }
+
     public RecipeDTO(String id, String description, String prep_time, List<String> preparaion_steps, List<String> ingredients) {
         this.id = id;
         this.description = description;

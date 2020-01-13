@@ -12,6 +12,9 @@ import java.util.List;
 public class UserDTO {
     private String userName;
     private List<String> roleList = new ArrayList();
+
+    public UserDTO() {
+    }
     
     public UserDTO(String userName, List<String> roleList) {
         this.userName = userName;

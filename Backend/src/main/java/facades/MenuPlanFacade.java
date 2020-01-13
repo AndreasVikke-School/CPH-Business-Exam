@@ -58,7 +58,7 @@ public class MenuPlanFacade {
         } 
     }
     
-    public List<MenuPlanDTO> getAllMenuPlansByUser(String username){
+    public List<MenuPlanDTO> getAllMenuPlansByUser(String username) {
         EntityManager em = getEntityManager();
         try {
             List<MenuPlan> menuPlans = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.user.userName = :username", MenuPlan.class)
@@ -73,14 +73,18 @@ public class MenuPlanFacade {
         } 
     }
     
-    public MenuPlanDTO createMenuPlan(MenuPlanDTO menuPlanDTO){
+    public MenuPlanDTO createMenuPlan(MenuPlanDTO menuPlanDTO) throws NoResultException {
         EntityManager em = getEntityManager();
         try {
             User user = em.find(User.class, menuPlanDTO.getUser().getUserName());
+            if(user == null) 
+                throw new NoResultException("User not found");
+            
             List<DayPlan> dayPlans = new ArrayList();
             for(DayPlanDTO dayPlanDTO : menuPlanDTO.getDayPlans())
                 dayPlans.add(new DayPlan(dayPlanDTO.getRecipeDTO().getId(), dayPlanDTO.getDayOfWeek()));
             MenuPlan menuPlan = new MenuPlan(user, 0, dayPlans);
+            
             em.getTransaction().begin();
             em.persist(menuPlan);
             em.getTransaction().commit();
@@ -90,7 +94,7 @@ public class MenuPlanFacade {
         } 
     }
     
-    public void deleteMenuPlan(long id){
+    public void deleteMenuPlan(long id) throws NoResultException {
         EntityManager em = getEntityManager();
         try {
             MenuPlan menuPlan = em.find(MenuPlan.class, id);

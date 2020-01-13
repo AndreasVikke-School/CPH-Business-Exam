@@ -17,6 +17,9 @@ public class MenuPlanDTO {
     private List<DayPlanDTO> dayPlans;
     private List<String> shoppingList;
 
+    public MenuPlanDTO() {
+    }
+
     public MenuPlanDTO(Long id, UserDTO user, int week, List<DayPlanDTO> dayPlans) {
         this.id = id;
         this.user = user;

@@ -1,8 +1,6 @@
 package entities.dto;
 
 import entities.DayPlan;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -12,6 +10,9 @@ public class DayPlanDTO {
     private Long id;
     private RecipeDTO recipeDTO;
     private int dayOfWeek;
+
+    public DayPlanDTO() {
+    }
 
     public DayPlanDTO(Long id, RecipeDTO recipeDTO, int dayOfWeek) {
         this.id = id;
