@@ -46,7 +46,7 @@ const NoMatch = () => <div>No match!</div>
 function Welcome() {
   return (
     <div className="d-flex justify-content-center align-items-center link">
-      <a href="https://github.com/asgerhs/CA-3/blob/master/README.md">Press me for quick start guide!!</a>
+      <a href="https://github.com/AndreasVikke/CPH-Business-Exam">Press me for quick start guide!!</a>
     </div>
   )
 }
