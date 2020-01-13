@@ -1,7 +1,7 @@
 const URLs = {
     "Home": "/",
     "Login": "/login",
-    "Data": "/data",
+    "ProductDetails": "/productdetails",
     "NoMatch": "*"
 }
 

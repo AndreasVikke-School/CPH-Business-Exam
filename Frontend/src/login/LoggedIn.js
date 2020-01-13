@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import facade from './ApiFacade'
-//import Calendar from 'react-calendar'
-import { Tab, Nav, Col, Row, Form, Table, InputGroup, FormControl, Alert, Modal, Button, ListGroup } from 'react-bootstrap'
+import { Tab, Tabs, Nav, Col, Row, Form, Table, InputGroup, FormControl, Alert, Modal, Button, ListGroup } from 'react-bootstrap'
 
 export default function LoggedIn() {
   const [user, setUser] = useState({});
@@ -88,7 +87,6 @@ export default function LoggedIn() {
       {messages.error !== undefined ? <Alert variant="danger">{messages.error}</Alert> : ""}
       {messages.success !== undefined ? <Alert variant="success">{messages.success}</Alert> : ""}
       <WeekView recipes={recipes} onChange={onChange} week={week} saveWeek={saveWeek} />
-      {/* <Calendar showWeekNumbers returnValue={"range"} onClickWeekNumber={onChange} /> */}
     </div>
   )
 }
@@ -104,6 +102,16 @@ function WeekView({ recipes, onChange, week, saveWeek }) {
         </Nav.Item>
       )
     }
+    tabs.push(
+      <Nav.Item key={8}>
+        <Nav.Link eventKey="shoppinglist">Shopping List</Nav.Link>
+      </Nav.Item>
+    )
+    tabs.push(
+      <Nav.Item key={9}>
+        <Nav.Link eventKey="weekoverview">Week Overview</Nav.Link>
+      </Nav.Item>
+    )
 
     return tabs;
   }
@@ -118,6 +126,16 @@ function WeekView({ recipes, onChange, week, saveWeek }) {
         </Tab.Pane>
       )
     }
+    tabs.push(
+      <Tab.Pane key={8} eventKey="shoppinglist">
+        <ShoppingList week={week} recipes={recipes} />
+      </Tab.Pane>
+    )
+    tabs.push(
+      <Tab.Pane key={9} eventKey="weekoverview">
+        <WeekOverview week={week} />
+      </Tab.Pane>
+    )
 
     return tabs;
   }
@@ -205,9 +223,9 @@ function DayView({ day, recipes, onChange, week }) {
 
 function RecipeDetails({ recipe, close }) {
   return (
-    <div className="recipeModal">
+    <div className="recipeModal" onClick={() => close()}>
       <Modal.Dialog>
-        <Modal.Header closeButton onClick={() => close()}>
+        <Modal.Header closeButton>
           <Modal.Title>{recipe.id} - {recipe.prep_time}</Modal.Title>
         </Modal.Header>
 
@@ -239,9 +257,45 @@ function RecipeDetails({ recipe, close }) {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => close()}>Close</Button>
+          <Button variant="secondary">Close</Button>
         </Modal.Footer>
       </Modal.Dialog>
     </div>
+  )
+}
+
+function ShoppingList({ week, recipes }) {
+  return (
+    <Tabs defaultActiveKey="1">
+      {Object.keys(week).map((key, index) => (key !== "week" && key !== "id" ?
+          <Tab key={index} eventKey={key} title={"Day " + key}>
+            {recipes.find(r => (r.id === week[key])).ingredients.map(ingredient =>
+              <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>
+            )}
+          </Tab>
+          : "")
+      )}
+    </Tabs>
+  )
+}
+
+function WeekOverview({ week }) {
+  return (
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Recipe</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.keys(week).map(key => (key !== "week" && key !== "id" ?
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{week[key]}</td>
+          </tr> : null
+        ))}
+      </tbody>
+    </Table>
   )
 }

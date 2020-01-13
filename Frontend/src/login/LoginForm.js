@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Facade from './ApiFacade';
 import Login from './Login';
 import LoggedIn from './LoggedIn';
+import RecipeDetails from '../Pages/RecipeDetails';
 
-export default function App() {
+export default function App({ page }) {
     const [loggedIn, setLoggedIn] = useState(false);
     const [error, setError] = useState();
 
@@ -39,7 +40,7 @@ export default function App() {
                 <Login login={login} register={register} />
                 <p>{error}</p>
                 </div>) : (<div>
-                    <LoggedIn />
+                    {page !== "productDetails" ? <LoggedIn /> : <RecipeDetails />}
                     <button className="btn btn-primary" onClick={logout}>Logout</button>
                 </div>)}
         </div>

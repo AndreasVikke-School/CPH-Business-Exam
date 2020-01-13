@@ -3,11 +3,8 @@ import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-do
 import './style/App.css';
 import LoginForm from './login/LoginForm';
 import URLSettings from './settings'
-import Data from './Data';
 
 function App() {
-
-
   return (
     <div className="App">
       <Router>
@@ -15,7 +12,7 @@ function App() {
         <Switch>
           <Route exact path={URLSettings.getURL("Home")}> <Welcome /> </Route>
           <Route path={URLSettings.getURL("Login")}> <LoginForm /> </Route>
-          <Route path={URLSettings.getURL("Data")}> <Data /> </Route>
+          <Route path={URLSettings.getURL("ProductDetails")}> <LoginForm page="productDetails" /> </Route>
           <Route path={URLSettings.getURL("NoMatch")}> <NoMatch /> </Route>
         </Switch>
         <Footer />
@@ -29,7 +26,6 @@ const Header = () => {
     <ul className="header">
       <li><NavLink activeClassName="active" exact to={URLSettings.getURL("Home")}>Home</NavLink></li>
       <li><NavLink activeClassName="active" to={URLSettings.getURL("Login")}>Login</NavLink></li>
-      <li><NavLink activeClassName="active" to={URLSettings.getURL("Data")}>Data</NavLink></li>
     </ul>
   )
 }
