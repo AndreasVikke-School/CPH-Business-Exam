@@ -20,11 +20,18 @@ public class RecipeResource {
     @Path("all")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public List<RecipeDTO> getSingleMenuPlanById(@PathParam("id") long id) {
+    public List<RecipeDTO> getAllRecipes(@PathParam("id") long id) {
+        return facade.fetchAllRecipies();
+    }
+    
+    @Path("findByName/{name}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public RecipeDTO getSingleRecipeByName(@PathParam("name") String name) {
         try {
-            return facade.fetchAllRecipies();
+            return facade.fetch(name);
         } catch(NoResultException ex) {
-            throw new WebApplicationException("No MenuPlan with id: " + id + " was found.", Status.NOT_FOUND);
+            throw new WebApplicationException("No MenuPlan with id: " + name + " was found.", Status.NOT_FOUND);
         }
     }
 }

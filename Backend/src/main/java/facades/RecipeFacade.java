@@ -42,7 +42,7 @@ public class RecipeFacade {
     private Map.Entry<Long, RecipeDTO> fetch(String urlStr, long id) {
         HttpURLConnection con = null;
         try {
-            URL url = new URL(urlStr);
+            URL url = new URL(urlStr.replace(" ", "%20"));
             System.out.println(url);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -63,10 +63,10 @@ public class RecipeFacade {
         }
     }
     
-    private RecipeDTO fetch(String urlStr) {
+    public RecipeDTO fetch(String name) {
         HttpURLConnection con = null;
         try {
-            URL url = new URL(urlStr);
+            URL url = new URL("http://46.101.217.16:4000/recipe/" + name.replace(" ", "%20"));
             System.out.println(url);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -153,7 +153,7 @@ public class RecipeFacade {
             List<RecipeDTO> res = new ArrayList();
             for (String specifc : specificList) {
                 Future<RecipeDTO> future = executor.submit(() -> {
-                    return fetch("http://46.101.217.16:4000/recipe/" + specifc.replace(" ", "%20"));
+                    return fetch(specifc.replace(" ", "%20"));
                 });
                 queue.add(future);
             }
