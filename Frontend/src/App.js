@@ -16,7 +16,6 @@ function App() {
           <Route exact path={URLSettings.getURL("Home")}> <Welcome /> </Route>
           <Route path={URLSettings.getURL("Login")}> <LoginForm /> </Route>
           <Route path={URLSettings.getURL("Data")}> <Data /> </Route>
-          <Route path={URLSettings.getURL("About")}> <About /> </Route>
           <Route path={URLSettings.getURL("NoMatch")}> <NoMatch /> </Route>
         </Switch>
         <Footer />
@@ -31,8 +30,6 @@ const Header = () => {
       <li><NavLink activeClassName="active" exact to={URLSettings.getURL("Home")}>Home</NavLink></li>
       <li><NavLink activeClassName="active" to={URLSettings.getURL("Login")}>Login</NavLink></li>
       <li><NavLink activeClassName="active" to={URLSettings.getURL("Data")}>Data</NavLink></li>
-      <li><NavLink activeClassName="active" to={URLSettings.getURL("About")}>About</NavLink></li>
-      <li><NavLink activeClassName="active" to={URLSettings.getURL("FAQ")}>FAQ</NavLink></li>
     </ul>
   )
 }
@@ -46,8 +43,6 @@ const Footer = () => {
     </footer>
   )
 }
-
-const About = () => <div>About</div>
 
 const NoMatch = () => <div>No match!</div>
 

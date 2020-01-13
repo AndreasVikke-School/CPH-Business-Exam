@@ -48,20 +48,44 @@ function ApiFacade() {
             .then(res => { setToken(res.token) })
     }
 
+    const register = (user, pass) => {
+        const options = makeOptions("POST", true, { username: user, password: pass });
+        return fetch(URL + "/api/login/register", options)
+            .then(handleHttpErrors)
+            .then(res => { setToken(res.token) })
+    }
+
     const fetchUser = () => {
         const options = makeOptions("GET", true); //True add's the token
         return fetch(URL + "/api/info/user", options).then(handleHttpErrors);
     }
 
-    const fetchData = () => {
-        return fetch(URL + "/api/swapi/demo", makeOptions("GET")).then(handleHttpErrors);
+    const fetchAllRecipies = () => {
+        return fetch(URL + "/api/recipe/all", makeOptions("GET")).then(handleHttpErrors);
+    }
+
+    const fetchMenuPlanByWeek = (week, username) => {
+        return fetch(URL + "/api/menuplan/week/" + week + "?username=" + username, makeOptions("GET", true)).then(handleHttpErrors);
+    }
+
+    const createMenuPlan = (menuPlan) => {
+        return fetch(URL + "/api/menuplan/add", makeOptions("POST", true, menuPlan)).then(handleHttpErrors);
+    }
+
+    const editMenuPlan = (menuPlan) => {
+        return fetch(URL + "/api/menuplan/edit", makeOptions("POST", true, menuPlan)).then(handleHttpErrors);
     }
 
     return {
         login,
+        register,
+        loggedIn,
         logout,
         fetchUser,
-        fetchData
+        fetchAllRecipies,
+        fetchMenuPlanByWeek,
+        createMenuPlan,
+        editMenuPlan
     }
 
 }

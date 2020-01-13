@@ -7,6 +7,7 @@ import entities.dto.DayPlanDTO;
 import entities.dto.MenuPlanDTO;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.DuplicateKeyException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -46,11 +47,12 @@ public class MenuPlanFacade {
         } 
     }
     
-    public MenuPlanDTO getSingleMenuPlanByWeek(int week) throws NoResultException {
+    public MenuPlanDTO getSingleMenuPlanByWeek(int week, String username) throws NoResultException {
         EntityManager em = getEntityManager();
         try {
-            MenuPlan menuPlan = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.week = :week", MenuPlan.class)
+            MenuPlan menuPlan = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.week = :week AND mp.user.userName = :username", MenuPlan.class)
                     .setParameter("week", week)
+                    .setParameter("username", username)
                     .getSingleResult();
             return new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans()));
         } finally {
@@ -76,12 +78,20 @@ public class MenuPlanFacade {
     public MenuPlanDTO createMenuPlan(MenuPlanDTO menuPlanDTO) throws NoResultException {
         EntityManager em = getEntityManager();
         try {
+            List<MenuPlan> menuPlanCheck = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.id = :week AND mp.user.userName = :username")
+                    .setParameter("week", menuPlanDTO.getWeek())
+                    .setParameter("username", menuPlanDTO.getUser().getUserName())
+                    .getResultList();
+            
+            if(menuPlanCheck.size() != 0)
+                throw new NoResultException("Week already excists");
+            
             User user = em.find(User.class, menuPlanDTO.getUser().getUserName());
             if(user == null) 
                 throw new NoResultException("User not found");
             
             List<DayPlan> dayPlans = new ArrayList();
-            MenuPlan menuPlan = new MenuPlan(user, 0, dayPlans);
+            MenuPlan menuPlan = new MenuPlan(user, menuPlanDTO.getWeek(), dayPlans);
             
             for(DayPlanDTO dayPlanDTO : menuPlanDTO.getDayPlans())
                 dayPlans.add(new DayPlan(dayPlanDTO.getRecipeDTO().getId(), dayPlanDTO.getDayOfWeek(), menuPlan));
@@ -114,5 +124,27 @@ public class MenuPlanFacade {
         } finally {
             em.close();
         } 
+    }
+    
+    public MenuPlanDTO editMenuPlan(MenuPlanDTO menuPlanDTO) throws NoResultException {
+        EntityManager em = getEntityManager();
+        try {
+            MenuPlan menuPlan = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.week = :week AND mp.user.userName = :username", MenuPlan.class)
+                    .setParameter("week", menuPlanDTO.getWeek())
+                    .setParameter("username", menuPlanDTO.getUser().getUserName())
+                    .getSingleResult();
+            
+            for(DayPlanDTO dayPlanDTO : menuPlanDTO.getDayPlans())
+                for(DayPlan dayPlan : menuPlan.getDayPlans())
+                    if(dayPlanDTO.getDayOfWeek() == dayPlan.getDayOfWeek())
+                        dayPlan.setRecipeId(dayPlanDTO.getRecipeDTO().getId());
+            
+            em.getTransaction().begin();
+            em.merge(menuPlan);
+            em.getTransaction().commit();
+            return new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans()));
+        } finally {
+            em.close();
+        }
     }
 }

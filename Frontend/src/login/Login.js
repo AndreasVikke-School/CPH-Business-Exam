@@ -5,7 +5,10 @@ export default function Login(props) {
 
     const onSubmit = (evt) => {
         evt.preventDefault();
-        props.login(state.username, state.password);
+        if(evt.target.id !== "register")
+            props.login(state.username, state.password);
+        else
+            props.register(state.username, state.password, state.password2);
     }
 
     const onChange = (evt) => {
@@ -13,10 +16,31 @@ export default function Login(props) {
     }
 
     return (
-        <form onSubmit={onSubmit} onChange={onChange}>
-            <input type="text" placeholder="username" id="username" />
-            <input type="text" placeholder="password" id="password" />
-            <input type="submit" value="Login" className="btn btn-primary"/>
-        </form>
+        <div className="container">
+            <h1>Login</h1>
+            <form id="login" onSubmit={onSubmit} onChange={onChange}>
+                <div className="form-group">
+                    <input type="text" className="form-control" placeholder="Username" id="username" />
+                </div>
+                <div className="form-group">
+                    <input type="password" className="form-control" placeholder="Password" id="password" />
+                </div>
+                <input type="submit" value="Login" className="btn btn-primary"/>
+            </form>
+            <br/><hr/><br/>
+            <h1>Register</h1>
+            <form id="register" onSubmit={onSubmit} onChange={onChange}>
+                <div className="form-group">
+                    <input type="text" className="form-control" placeholder="Username" id="username" />
+                </div>
+                <div className="form-group">
+                    <input type="password" className="form-control" placeholder="Password" id="password" />
+                </div>
+                <div className="form-group">
+                    <input type="password" className="form-control" placeholder="Password" id="password2" />
+                </div>
+                <input type="submit" value="Register" className="btn btn-primary"/>
+            </form>
+        </div>
     )
 }

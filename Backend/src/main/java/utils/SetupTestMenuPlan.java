@@ -20,7 +20,7 @@ public class SetupTestMenuPlan {
         
         User user = em.find(User.class, "user");
         List<DayPlan> dayPlans = new ArrayList();
-        MenuPlan menuPlan = new MenuPlan(user, 0, dayPlans);
+        MenuPlan menuPlan = new MenuPlan(user, 1, dayPlans);
         
         dayPlans.add(new DayPlan("slow cooker beef stew", 1, menuPlan));
         dayPlans.add(new DayPlan("Smoked paprika goulash for the slow cooker", 2, menuPlan));

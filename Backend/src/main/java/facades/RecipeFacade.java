@@ -37,12 +37,10 @@ public class RecipeFacade {
         return instance;
     }
 
-    //This fetch method returns a string with json format
-    //based on a given url (using HTTP connection and a request method).
     private Map.Entry<Long, RecipeDTO> fetch(String urlStr, long id) {
         HttpURLConnection con = null;
         try {
-            URL url = new URL(urlStr.replace(" ", "%20"));
+            URL url = new URL(urlStr.trim().replace(" ", "%20"));
             System.out.println(url);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -66,7 +64,7 @@ public class RecipeFacade {
     public RecipeDTO fetch(String name) {
         HttpURLConnection con = null;
         try {
-            URL url = new URL("http://46.101.217.16:4000/recipe/" + name.replace(" ", "%20"));
+            URL url = new URL("http://46.101.217.16:4000/recipe/" + name.trim().replace(" ", "%20"));
             System.out.println(url);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -87,37 +85,6 @@ public class RecipeFacade {
         }
     }
 
-    //This fetch method returns a string with json format
-    //based on a given url and a specific* (using HTTP connection and a request method).
-    //*a specific is abstract for a given identity to a variable on an endpoint
-    //example would be a specific person ID on a person API.
-    public List<RecipeDTO> fetchAllRecipies() {
-        HttpURLConnection con = null;
-        try {
-            URL url = new URL("http://46.101.217.16:4000/allRecipes");
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
-            con.addRequestProperty("User-Agent", "Mozilla/4.76;Chrome");
-            String jsonStr = "";
-            try ( Scanner scan = new Scanner(con.getInputStream())) {
-                while (scan.hasNext()) {
-                    jsonStr += scan.nextLine();
-                }
-            }
-            jsonStr = jsonStr.substring(1, jsonStr.length()-1);
-            return fetch(jsonStr.replace("\"", "").split(","));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            con.disconnect();
-        }
-    }
-
-    //This fetch method returns a list of strings with json format
-    //based on a given url and a list of specifics* (using HTTP connection and a request method).
-    //See the definition of a "specific" above.
     public Map<Long, RecipeDTO> fetch(List<DayPlan> specificList) {
         final ExecutorService executor = Executors.newCachedThreadPool();
         try {
@@ -125,7 +92,7 @@ public class RecipeFacade {
             Map<Long, RecipeDTO> res = new HashMap();
             for (DayPlan specifc : specificList) {
                 Future<Map.Entry<Long, RecipeDTO>> future = executor.submit(() -> {
-                    return fetch("http://46.101.217.16:4000/recipe/" + specifc.getRecipeId().replace(" ", "%20"), specifc.getId());
+                    return fetch("http://46.101.217.16:4000/recipe/" + specifc.getRecipeId().trim().replace(" ", "%20"), specifc.getId());
                 });
                 queue.add(future);
             }
@@ -153,7 +120,7 @@ public class RecipeFacade {
             List<RecipeDTO> res = new ArrayList();
             for (String specifc : specificList) {
                 Future<RecipeDTO> future = executor.submit(() -> {
-                    return fetch(specifc.replace(" ", "%20"));
+                    return fetch(specifc.trim().replace(" ", "%20"));
                 });
                 queue.add(future);
             }
@@ -171,6 +138,30 @@ public class RecipeFacade {
             return null;
         } finally {
             executor.shutdown();
+        }
+    }
+   
+    public List<RecipeDTO> fetchAllRecipies() {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL("http://46.101.217.16:4000/allRecipes");
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            con.addRequestProperty("User-Agent", "Mozilla/4.76;Chrome");
+            String jsonStr = "";
+            try ( Scanner scan = new Scanner(con.getInputStream())) {
+                while (scan.hasNext()) {
+                    jsonStr += scan.nextLine();
+                }
+            }
+            jsonStr = jsonStr.substring(1, jsonStr.length()-1);
+            return fetch(jsonStr.replace("\"", "").split(","));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            con.disconnect();
         }
     }
 }

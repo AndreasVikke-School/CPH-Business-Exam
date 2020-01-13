@@ -58,6 +58,32 @@ public class LoginEndpoint {
     }
     throw new AuthenticationException("Invalid username or password! Please try again");
   }
+  
+  @POST
+  @Path("/register")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response register(String jsonString) throws AuthenticationException {
+    JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
+    String username = json.get("username").getAsString();
+    String password = json.get("password").getAsString();
+
+    USER_FACADE.createUser(username, password);
+    try {
+        User user = USER_FACADE.getVeryfiedUser(username, password);
+        String token = createToken(username, user.getRolesAsStrings());
+        JsonObject responseJson = new JsonObject();
+        responseJson.addProperty("username", username);
+        responseJson.addProperty("token", token);
+        return Response.ok(new Gson().toJson(responseJson)).build();
+    } catch (JOSEException | AuthenticationException ex) {
+      if (ex instanceof AuthenticationException) {
+        throw (AuthenticationException) ex;
+      }
+      Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    throw new AuthenticationException("Invalid username or password! Please try again");
+  }
 
   private String createToken(String userName, List<String> roles) throws JOSEException {
 
