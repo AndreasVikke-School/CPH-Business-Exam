@@ -44,19 +44,3 @@ a:hover {
   color: hotpink;
   text-decoration: none;
 }
-
-.recipeModal {
-  background: rgba(0,0,0,0.6);
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top:0;
-  left:0;
-  z-index: 999;
-}
-.modal-body {
-  text-align: left;
-}
-.modal-dialog {
-  max-width: 1000px;
-}

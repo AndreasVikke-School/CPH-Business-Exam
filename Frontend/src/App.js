@@ -12,7 +12,7 @@ function App() {
         <Switch>
           <Route exact path={URLSettings.getURL("Home")}> <Welcome /> </Route>
           <Route path={URLSettings.getURL("Login")}> <LoginForm /> </Route>
-          <Route path={URLSettings.getURL("ProductDetails")}> <LoginForm page="productDetails" /> </Route>
+          <Route path={URLSettings.getURL("ProductDetails", "name")}> <LoginForm page="productDetails" /> </Route>
           <Route path={URLSettings.getURL("NoMatch")}> <NoMatch /> </Route>
         </Switch>
         <Footer />

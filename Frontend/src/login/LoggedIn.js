@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import facade from './ApiFacade'
-import { Tab, Tabs, Nav, Col, Row, Form, Table, InputGroup, FormControl, Alert, Modal, Button, ListGroup } from 'react-bootstrap'
+import { Tab, Tabs, Nav, Col, Row, Form, Table, InputGroup, FormControl, Alert, ListGroup } from 'react-bootstrap'
+import { Redirect } from 'react-router-dom';
+import URLSettings from '../settings'
 
 export default function LoggedIn() {
   const [user, setUser] = useState({});
@@ -170,12 +172,16 @@ function WeekView({ recipes, onChange, week, saveWeek }) {
 function DayView({ day, recipes, onChange, week }) {
   const [recipe, setRecipe] = useState({});
 
+  const recipeClicked = (recipe) => {
+    setRecipe(recipe);
+  }
+
   const createTableData = () => {
     let data = [];
 
     recipes.forEach((recipe, index) => {
       data.push(
-        <tr key={index} style={week[day] === recipe.id ? {"backgroundColor": "#007bff"} : {}} onClick={() => setRecipe(recipe)} >
+        <tr key={index} style={week[day] === recipe.id ? {"backgroundColor": "#007bff"} : {}}>
           <td>
             <Form.Check
               data-key={day}
@@ -187,8 +193,8 @@ function DayView({ day, recipes, onChange, week }) {
               onChange={onChange}
             />
           </td>
-          <td>{recipe.id}</td>
-          <td>{recipe.prep_time}</td>
+          <td onClick={() => recipeClicked(recipe)}>{recipe.id}</td>
+          <td onClick={() => recipeClicked(recipe)}>{recipe.prep_time}</td>
         </tr>
       )
     });
@@ -196,13 +202,9 @@ function DayView({ day, recipes, onChange, week }) {
     return data;
   }
 
-  const closeModal = () => {
-    setRecipe({});
-  }
-
   return (
     <div>
-      {recipe.id !== undefined ? <RecipeDetails recipe={recipe} close={closeModal} /> : ""}
+      {recipe.id !== undefined ? <Redirect to={URLSettings.getURL("ProductDetails") + "/" + recipe.id} /> : ""}
       <Form>
         <Table striped bordered hover>
           <thead>
@@ -221,57 +223,14 @@ function DayView({ day, recipes, onChange, week }) {
   )
 }
 
-function RecipeDetails({ recipe, close }) {
-  return (
-    <div className="recipeModal" onClick={() => close()}>
-      <Modal.Dialog>
-        <Modal.Header closeButton>
-          <Modal.Title>{recipe.id} - {recipe.prep_time}</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <Row>
-            <Col sm={12}>
-              {recipe.description}
-            </Col>
-          </Row>
-          <br/><br />
-          <Row>
-            <Col sm={6}>
-              <h1>Ingredients</h1>
-              <ListGroup variant="flush">
-                {recipe.ingredients.map((ingredient, index) => (
-                  <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Col>
-            <Col sm={6}>
-              <h1>Preperation</h1>
-              <ListGroup variant="flush">
-                {recipe.preparaion_steps.map((step, index) => (
-                  <ListGroup.Item key={index}>{step}</ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Col>
-          </Row>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
-  )
-}
-
 function ShoppingList({ week, recipes }) {
   return (
     <Tabs defaultActiveKey="1">
       {Object.keys(week).map((key, index) => (key !== "week" && key !== "id" ?
-          <Tab key={index} eventKey={key} title={"Day " + key}>
-            {recipes.find(r => (r.id === week[key])).ingredients.map(ingredient =>
-              <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>
-            )}
+          <Tab key={key} eventKey={key} title={"Day " + key}>
+            {recipes.length > 0 ? recipes.find(r => (r.id === week[key])).ingredients.map((ingredient, index2) =>
+              <ListGroup.Item key={index2}>{ingredient}</ListGroup.Item>
+            ) : ""}
           </Tab>
           : "")
       )}

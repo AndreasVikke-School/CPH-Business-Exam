@@ -64,6 +64,10 @@ function ApiFacade() {
         return fetch(URL + "/api/recipe/all", makeOptions("GET")).then(handleHttpErrors);
     }
 
+    const fetchRecipeByName = (name) => {
+        return fetch(URL + "/api/recipe/findByName/" + name, makeOptions("GET")).then(handleHttpErrors);
+    }
+
     const fetchMenuPlanByWeek = (week, username) => {
         return fetch(URL + "/api/menuplan/week/" + week + "?username=" + username, makeOptions("GET", true)).then(handleHttpErrors);
     }
@@ -85,7 +89,8 @@ function ApiFacade() {
         fetchAllRecipies,
         fetchMenuPlanByWeek,
         createMenuPlan,
-        editMenuPlan
+        editMenuPlan,
+        fetchRecipeByName
     }
 
 }
