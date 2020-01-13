@@ -1,6 +1,7 @@
 package entities.dto;
 
 import entities.Role;
+import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,12 @@ public class UserDTO {
     public UserDTO(String userName, List<String> roleList) {
         this.userName = userName;
         this.roleList = roleList;
+    }
+    
+    public UserDTO(User user) {
+        this.userName = user.getUserName();
+        for(Role role : user.getRoleList())
+            roleList.add(role.getRoleName());
     }
 
     public String getUserName() {
