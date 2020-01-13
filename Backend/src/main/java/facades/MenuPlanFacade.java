@@ -81,12 +81,16 @@ public class MenuPlanFacade {
                 throw new NoResultException("User not found");
             
             List<DayPlan> dayPlans = new ArrayList();
-            for(DayPlanDTO dayPlanDTO : menuPlanDTO.getDayPlans())
-                dayPlans.add(new DayPlan(dayPlanDTO.getRecipeDTO().getId(), dayPlanDTO.getDayOfWeek()));
             MenuPlan menuPlan = new MenuPlan(user, 0, dayPlans);
+            
+            for(DayPlanDTO dayPlanDTO : menuPlanDTO.getDayPlans())
+                dayPlans.add(new DayPlan(dayPlanDTO.getRecipeDTO().getId(), dayPlanDTO.getDayOfWeek(), menuPlan));
             
             em.getTransaction().begin();
             em.persist(menuPlan);
+            for(DayPlan dayPlan : dayPlans) {
+                em.persist(dayPlan);
+            }
             em.getTransaction().commit();
             return new MenuPlanDTO(menuPlan, new RecipeFacade().fetch(menuPlan.getDayPlans()));
         } finally {
@@ -100,7 +104,11 @@ public class MenuPlanFacade {
             MenuPlan menuPlan = em.find(MenuPlan.class, id);
             if(menuPlan == null)
                 throw new NoResultException("MenuPlan not found");
+            
             em.getTransaction().begin();
+            for(DayPlan dayPlan : menuPlan.getDayPlans()) {
+                em.remove(dayPlan);
+            }
             em.remove(menuPlan);
             em.getTransaction().commit();
         } finally {

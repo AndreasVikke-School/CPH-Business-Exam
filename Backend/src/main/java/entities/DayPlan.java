@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -19,13 +21,18 @@ public class DayPlan implements Serializable {
     private Long id;
     private String recipeId;
     private int dayOfWeek;
+    
+    @ManyToOne
+    @JoinColumn( name="menuPlan_id" )
+    private MenuPlan menuPlan;
 
     public DayPlan() {
     }
 
-    public DayPlan(String recipeId, int dayOfWeek) {
+    public DayPlan(String recipeId, int dayOfWeek, MenuPlan menuPlan) {
         this.recipeId = recipeId;
         this.dayOfWeek = dayOfWeek;
+        this.menuPlan = menuPlan;
     }
 
     public Long getId() {
@@ -50,5 +57,13 @@ public class DayPlan implements Serializable {
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    public MenuPlan getMenuPlan() {
+        return menuPlan;
+    }
+
+    public void setMenuPlan(MenuPlan menuPlan) {
+        this.menuPlan = menuPlan;
     }
 }
