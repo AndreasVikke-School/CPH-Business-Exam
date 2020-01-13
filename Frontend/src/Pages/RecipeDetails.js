@@ -9,7 +9,7 @@ function RecipeDetails() {
 
     useEffect(() => {
         facade.fetchRecipeByName(match.params.name).then(res => setRecipe(res));
-    }, [])
+    }, [match.params.name])
 
     return (
         <div className="container">
