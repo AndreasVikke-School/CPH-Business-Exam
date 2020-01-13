@@ -40,7 +40,7 @@ public class MenuPlanFacade {
             MenuPlan menuPlan = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.id = :id", MenuPlan.class)
                     .setParameter("id", id)
                     .getSingleResult();
-            return new MenuPlanDTO(menuPlan, new RecipeFacade().fetch(menuPlan.getDayPlans()));
+            return new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans()));
         } finally {
             em.close();
         } 
@@ -52,7 +52,7 @@ public class MenuPlanFacade {
             MenuPlan menuPlan = em.createQuery("SELECT mp FROM MenuPlan mp WHERE mp.week = :week", MenuPlan.class)
                     .setParameter("week", week)
                     .getSingleResult();
-            return new MenuPlanDTO(menuPlan, new RecipeFacade().fetch(menuPlan.getDayPlans()));
+            return new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans()));
         } finally {
             em.close();
         } 
@@ -66,7 +66,7 @@ public class MenuPlanFacade {
                     .getResultList();
             List<MenuPlanDTO> menuPlansDTO = new ArrayList();
             for(MenuPlan menuPlan : menuPlans) 
-                menuPlansDTO.add(new MenuPlanDTO(menuPlan, new RecipeFacade().fetch(menuPlan.getDayPlans())));
+                menuPlansDTO.add(new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans())));
             return menuPlansDTO;
         } finally {
             em.close();
@@ -92,7 +92,7 @@ public class MenuPlanFacade {
                 em.persist(dayPlan);
             }
             em.getTransaction().commit();
-            return new MenuPlanDTO(menuPlan, new RecipeFacade().fetch(menuPlan.getDayPlans()));
+            return new MenuPlanDTO(menuPlan, RecipeFacade.getFacade().fetch(menuPlan.getDayPlans()));
         } finally {
             em.close();
         } 

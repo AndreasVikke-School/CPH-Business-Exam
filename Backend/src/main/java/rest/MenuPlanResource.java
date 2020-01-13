@@ -17,19 +17,18 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-//Todo Remove or change relevant parts before ACTUAL use
 @Path("menuplan")
 public class MenuPlanResource {
 
-    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
-    private static final MenuPlanFacade FACADE =  MenuPlanFacade.getFacade(EMF);
+    private static final EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
+    private static final MenuPlanFacade facade =  MenuPlanFacade.getFacade(emf);
     
     @Path("{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public MenuPlanDTO getSingleMenuPlanById(@PathParam("id") long id) {
         try {
-            return FACADE.getSingleMenuPlanById(id);
+            return facade.getSingleMenuPlanById(id);
         } catch(NoResultException ex) {
             throw new WebApplicationException("No MenuPlan with id: " + id + " was found.", Status.NOT_FOUND);
         }
@@ -40,7 +39,7 @@ public class MenuPlanResource {
     @Produces({MediaType.APPLICATION_JSON})
     public MenuPlanDTO getSingleMenuPlanByWeek(@PathParam("week") int week) {
         try {
-            return FACADE.getSingleMenuPlanByWeek(week);
+            return facade.getSingleMenuPlanByWeek(week);
         } catch(NoResultException ex) {
             throw new WebApplicationException("No MenuPlan with week: " + week + " was found.", Status.NOT_FOUND);
         }
@@ -50,7 +49,7 @@ public class MenuPlanResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<MenuPlanDTO> getSingleMenuPlanById(@PathParam("username") String username) {
-        return FACADE.getAllMenuPlansByUser(username);
+        return facade.getAllMenuPlansByUser(username);
     }
     
     @Path("add")
@@ -59,7 +58,7 @@ public class MenuPlanResource {
     @Consumes({MediaType.APPLICATION_JSON})
     public MenuPlanDTO createMenuPlan(MenuPlanDTO menuPlanDTO) {
         try {
-            return FACADE.createMenuPlan(menuPlanDTO);
+            return facade.createMenuPlan(menuPlanDTO);
         } catch(NoResultException ex) {
             throw new WebApplicationException("User not found.", Status.NOT_FOUND);
         }
@@ -70,7 +69,7 @@ public class MenuPlanResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String deleteMenuPlan(@PathParam("id") long id) {
         try {
-            FACADE.deleteMenuPlan(id);
+            facade.deleteMenuPlan(id);
             return "{\"message\":\"MenuPlan with id: " + id + " has been deleted\"}";
         } catch(NoResultException ex) {
             throw new WebApplicationException("No MenuPlan with id: " + id + " was found.", Status.NOT_FOUND);
