@@ -10,8 +10,7 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route exact path={URLSettings.getURL("Home")}> <Welcome /> </Route>
-          <Route path={URLSettings.getURL("Login")}> <LoginForm /> </Route>
+          <Route exact path={URLSettings.getURL("Home")}> <LoginForm /> </Route>
           <Route path={URLSettings.getURL("ProductDetails", "name")}> <LoginForm page="productDetails" /> </Route>
           <Route path={URLSettings.getURL("NoMatch")}> <NoMatch /> </Route>
         </Switch>
@@ -25,7 +24,6 @@ const Header = () => {
   return (
     <ul className="header">
       <li><NavLink activeClassName="active" exact to={URLSettings.getURL("Home")}>Home</NavLink></li>
-      <li><NavLink activeClassName="active" to={URLSettings.getURL("Login")}>Login</NavLink></li>
     </ul>
   )
 }
@@ -41,14 +39,5 @@ const Footer = () => {
 }
 
 const NoMatch = () => <div>No match!</div>
-
-//If Welcome function reaches about 10 lines of code place the function in separate file.
-function Welcome() {
-  return (
-    <div className="d-flex justify-content-center align-items-center link">
-      <a href="https://github.com/AndreasVikke/CPH-Business-Exam">Press me for quick start guide!!</a>
-    </div>
-  )
-}
 
 export default App;

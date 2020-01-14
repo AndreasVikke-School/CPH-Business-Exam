@@ -13,7 +13,7 @@ function RecipeDetails() {
 
     return (
         <div className="container">
-            <Link to="/login" className="btn btn-primary">Back</Link>
+            <Link to="/" className="btn btn-primary">Back</Link>
             <Row>
                 <Col sm={12}>
                     <h1>{recipe.id} - {recipe.prep_time}</h1>
