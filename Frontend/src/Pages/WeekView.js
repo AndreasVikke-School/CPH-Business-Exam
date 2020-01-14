@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, Nav, Col, Row, Table, InputGroup, FormControl, ListGroup } from 'react-bootstrap'
 import DayView from './DayView';
 
-export default function WeekView({ recipes, onChange, week, saveWeek, deleteWeek }) {
+export default function WeekView({ recipes, onChange, week, saveWeek, deleteWeek, }) {
     const createTabLinks = () => {
         let tabs = [];
 
@@ -33,7 +33,7 @@ export default function WeekView({ recipes, onChange, week, saveWeek, deleteWeek
         for(let i = 1; i <= 7; i++) {
         tabs.push(
             <Tab.Pane eventKey={i} key={i}>
-            <DayView day={i} recipes={recipes} onChange={onChange} week={week} />
+                <DayView day={i} recipes={recipes} onChange={onChange} week={week} />
             </Tab.Pane>
         )
         }

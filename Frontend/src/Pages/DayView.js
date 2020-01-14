@@ -52,14 +52,14 @@ export default function DayView({ day, recipes, onChange, week }) {
             <Form>
                 <Table striped bordered hover>
                     <thead>
-                    <tr>
-                        <th>Selected</th>
-                        <th>Name</th>
-                        <th>Preperation time</th>
-                    </tr>
+                      <tr>
+                          <th>Selected</th>
+                          <th>Name</th>
+                          <th>Preperation time</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    {createTableData()}
+                      {createTableData()}
                     </tbody>
                 </Table>
                 <InputGroup size="sm" className="mb-3">
